@@ -13,15 +13,17 @@
 #include "serial.h"
 #include <util/delay.h>
 
-#include "motor.h"
-#include "active.h"
+//#include "motor.h"
+//#include "active.h"
 #include "QTI.h"
 #include "sonar.h"
 
 ISR(){
-	//Interrupt
+	//Interrupt for QTI's
 }
-
+ISR(){
+	//Interrupt for Sonar
+}
 
 int main(void){
 	//choose pin
