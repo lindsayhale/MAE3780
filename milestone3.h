@@ -14,8 +14,6 @@
 #include "QTI1.h"
 #include "wheelie2.h"
 
-volatile int itime;
-
 ISR(PCINT2_vect){
 	//Interrupt for QTI's
 	//FIX ME: does it sense the other robot when front 1 QTI's go off???
