@@ -15,24 +15,21 @@
 #include <util/delay.h>
 #include "QTI1.h"
 #include "wheelie.h"
-//#include "Sonar.h"
-//#include "motor.h"
-//#include "active.h"
+#include "Sonar.h"
+#include "motor.h"
+#include "active.h"
 
 volatile int itime;
-//volatile int go = 1; //whether or not the center QTI sees white
+volatile int go = 1; //whether or not the center QTI sees white
 
 ISR(PCINT2_vect){
 	//Interrupt for QTI's
 	//FIX ME: does it sense the other robot when front 1 QTI's go off???
 	if (~PIND & 1<<PD2) { //pin PD2 attached to center QTI
-		//go = 0; //stop while loop
-		//killQTI(PD2);
-		//turn LED on
+		go = 0; //stop while loop
+		killQTI(PD2);
 	} else if ((~PIND & (1<<PD1)) && (~PIND & 1<<PD0)) { //both pin PD1 and PD0
 		//turn 90 degrees
-		//OCR0A |= 0x8000;
-		//OCR0B |= 0x8000;
 		oneEighty(); //turn off wheels
 		OCR0A |= 0x8000; //Duty cycle 50%
 		OCR0B |= 0x8000;
@@ -82,7 +79,7 @@ int main(void){
 	wheelSetup();
 	drive(0,0);
 	
-	while(1){
+	while(go){
 		//loop that the robot goes through
 	}
 	//shut down robot when white line
