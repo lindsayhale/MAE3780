@@ -9,7 +9,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
  */ 
-volatile int itime;
+//volatile int itime;
 
 void initSonar()
 {
