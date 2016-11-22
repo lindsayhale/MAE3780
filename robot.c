@@ -12,17 +12,38 @@
 #include <avr/interrupt.h>
 #include "serial.h"
 #include <util/delay.h>
-
 //#include "motor.h"
 //#include "active.h"
 #include "QTI.h"
-#include "sonar.h"
+#include "Sonar.h"
 
-ISR(){
+volatile int itime;
+
+ISR(PCINT2_vect){ 
 	//Interrupt for QTI's
+	if (PIND & 0b00001000) { //pin PD3
+		PORTD &= 0b11110111;
+		PORTD |= 0b00000100;
+		PORTB |= 1<<PB5;
+		printf("sense black");
+	} else {
+		PORTB &= 0b00000000;
+		printf("sense white");
+	} 
 }
-ISR(){
+
+ISR(PCINT0_vect){ 
 	//Interrupt for Sonar
+	unsigned char sreg;
+	if(PINB & 0b00000001) { //pin PB0
+		sreg = SREG;
+		cli();
+		TCNT1 = 0;
+		SREG = sreg;
+	} else {
+		PCMSK0 &= 0b11111110; //sets PCINT0 to 0
+		itime = TCNT1;
+	}
 }
 
 int main(void){
@@ -30,7 +51,9 @@ int main(void){
 	//set as input/output
 	//interrupt stuff
 	//enable shit
+	init_uart();
 	sei();
+	startSonar();
 	while(){
 		//loop that the robot goes through
 	}
