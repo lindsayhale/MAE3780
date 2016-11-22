@@ -12,7 +12,7 @@
 #include "serial.h"
 #include <util/delay.h>
 #include "QTI1.h"
-#include "wheelie.h"
+#include "wheelie2.h"
 
 volatile int itime;
 
