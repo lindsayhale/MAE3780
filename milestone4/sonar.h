@@ -36,7 +36,7 @@ int getSonar(){
 //does this make sense?? I chose 28 because the circle is 36 inches in Diamater (3ft right) and 
 //the robot is 8 by 8
 bool seeOpponent(){
-	if (getSonar() <= 28){ //sense robot within circle
+	if (getSonar() <= 25){ //sense robot within circle
 		return TRUE; //return true if find robot in circle
 	} else { 
 		return FALSE; //return fale if dont sense robot at that point

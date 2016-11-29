@@ -13,7 +13,7 @@ void killQTI(){
 	//turn on LED
 	PORTD |= (1<<PD5); //set LED high
 	while(1){
-		PORTB &= 0b11110000; //stops
+		PORTB &= 0b11100001; //stops
 	}
 }
 
