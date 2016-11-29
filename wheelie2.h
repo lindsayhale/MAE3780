@@ -5,64 +5,22 @@
  *  Author: MAE_Labs Lindsay Hale
  */ 
 
-
-#ifndef wheelie2_H_
-#define wheelie2_H_
-
-void straightline(){
-	//oneEighty
-	PORTD &= (0<<PD6) | (0<<PD5); //stops
-	_delay_ms(500); //delay half sec
-	PORTD |= (1<<PD5) | (1<<PD4); //turn
-	_delay_ms(500); //delay half sec
-	PORTD &= (0<<PD4) | (0<<PD5); //stop
-	OCR0A |= 0x8000; //Duty cycle 50%
-	OCR0B |= 0x8000;
-	PORTD |= (1<<PD5) | (1<<PD6); //drive(0,0)
-}
-
-void squaretest(){
-	PORTD &= (0<<PD6) | (0<<PD5); //stops
-	_delay_ms(500); //delay half sec
-	PORTD |= (1<<PD5) //turn left
-	_delay_ms(500); //delay half sec
-	PORTD &= (0<<PD5); //stop
-	PORTD |= (1<<PD5) | (1<<PD6); //drive(0,0)
-}
-
-
-void drive(int left, int right){
-	//PD5(right) and PD6 (left)
-	if (left && right){ 
-	//} else if (right) { //right QTI goes off, turn left
-		//PORTD |= (1<<PD5);
-		//PORTD &= (0<<PD6);
-	//} else if (left) { //left QTI goes off, turn right
-		//PORTD |= (1<<PD6);
-		//PORTD &= (0<<PD5);
-	} else {
-		PORTD |= (1<<PD5) | (1<<PD6);
-	}
-}
+#ifndef WHEELIE2_H							// This is to prevent this file from being included more than once in the project
+#define WHEELIE2_H
 
 void wheelSetup(){ //PWM
-	DDRD |= (1<<PD5) | (1<<PD6); //make wheel outputs
+	
+	printf("wheelsetup\n");
+	
 	
 	//set timers:
-	TCCR0A |= (1<<WGM00) | (1<< COM0A1) | (1<< COM0A0)| (1<< COM0B1)| (1<< COM0B0);
-	TCCR0B |= (1<<WGM02) | (1<<CS00); 
+	TCCR1A |= (1<< COM1A1) | (1<< COM1A0)| (1<< COM1B1)| (1<< COM1B0);
+	TCCR1B |= (1<<WGM13);
+	ICR1 |= 0xFF;
 
-	OCR0A |= 0x0000; //Duty cycle 100%
-	OCR0B |= 0x0000;
+	OCR1A |= 0x0000; //Duty cycle 100%
+	OCR1B |= 0x0000;
 	
 }
-/*
-void oneEighty(){
-	PORTD &= (0<<PD6) | (0<<PD5); //stops
-	_delay_ms(500); //delay half sec
-	PORTD |= (1<<PD5) | (1<<PD4); //turn
-	_delay_ms(500); //delay half sec
-	PORTD &= (0<<PD4) | (0<<PD5); //stop
-}
-*/
+
 #endif /* wheelie2_H_ */
