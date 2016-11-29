@@ -42,27 +42,30 @@ ISR(PCINT2_vect){
 	}
 	
 	if (!(seeOpponent())){
+		i = 0;
+
+		//PB0 = sonar, PB1 = forward right, PB4 = backwards right, PB2 = forward left, PB3 = backwards left
 		if ((~PIND & (1<<PD2)) && (~PIND & 1<<PD3)) { //both pins go off PD2 and PD3
 			PORTB &= 0b11111001; //stops
-			PORTB |=  (1<<PB0) | (1<<PB3); //backwards
+			PORTB |=  (1<<PB4) | (1<<PB3); //backwards
 			_delay_ms(500); //delay
-			PORTB &= 0b11110111; //stops 
-			PORTB |= (1<<PB2) | (1<<PB0); //spin left
+			PORTB &= 0b11100111; //stops 
+			PORTB |= (1<<PB2) | (1<<PB4); //spin left
 			i = 0; //continue to spin left in main
 			
 		} else if (~PIND & 1<<PD2){ // PD2 goes off turn left
-			PORTB &= 0b11111101; //stops left wheel
-			PORTB |= (1<<PB0) | (1<<PB2); //spin left
+			PORTB &= 0b11110101; //stops wheels
+			PORTB |= (1<<PB4) | (1<<PB2); //spin left- left forward, right backward
 			i = 0; //continue to spin left in main
 
 			
 		} else if (~PIND & 1<<PD3){ // turn right
-			PORTB &= 0b11111011; //stops right wheel
+			PORTB &= 0b11101011; //stops wheels
 			PORTB |= (1<<PB3) | (1<<PB1); //spin right
 			i = 1; //continue to spin right in main
 
 		} else { //no white under any sensors
-			PORTB &= 0b11110110;
+			PORTB &= 0b11100111;
 			PORTB |= (1<<PB1) | (1<<PB2); //drive forward
 		}
 	}
@@ -80,7 +83,7 @@ int main(void){
 	initSonar();
 
 	//set wheels to outputs
-	wheelSetup(PB0, PB1, PB2, PB3);
+	wheelSetup(PB4, PB1, PB2, PB3);
 
 	//enable interrupt
 	sei();
@@ -91,7 +94,7 @@ int main(void){
 
 		while (!(seeOpponent())){
 			if (i == 0){
-				PORTB |= (1<<PB0) | (1<<PB2); //spin left
+				PORTB |= (1<<PB4) | (1<<PB2); //spin left
 			} else {
 				PORTB |= (1<<PB3) | (1<<PB1); //spin right
 			}
@@ -99,7 +102,7 @@ int main(void){
 
 		while(seeOpponent()){
 			//drive
-			PORTB &= 0b11110110;
+			PORTB &= 0b11100111;
 			PORTB |= (1<<PB1) | (1<<PB2); //drive
 		}
 	}
