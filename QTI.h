@@ -1,35 +1,34 @@
 /*
- * QTI.h
+ * QTI1.h
  *
- * Created: 11/18/2016 2:11:52 PM
- *  Author: Lindsay Jonah Andy
+ * Created: 11/21/2016 8:01:52 PM
+ *  Author: MAE_Labs
  */ 
 
-/*ISR(PCINT2_vect){
-	if((PIND & 0b00001000)){
-		PORTD &= 0b11110111;
-		PORTD |= 0b00000100;
-		PORTB |= 1<<PB5;
-		printf("sense black");
-	}else{
-		PORTB &= 0b00000000;
-		printf("sense white");
+#ifndef QTI_H
+#define QTI_H
+
+void killQTI(){
+	//when center QTI goes off kill the robot and stop driving
+	//turn on LED
+	PORTD |= (1<<PD5); //set LED high
+	while(1){
+		PORTB &= 0b11100001; //stops
 	}
-} */
-void killQTI(int pin){
-	//when center QTI goes off kill the robot
 }
 
-void alertQTI(int pin1, int pin2){
-	//front QTI senses white
-	//send left, right, both to main??
+void setupQTI(int pin1, int pin2, int pin3, int pin4, int pin5){ 
+	//set up all 3 QTI sensors on pins for interrupts
+	PCMSK2 |= (1<<pin1) | (1<<pin2) | (1<<pin3);
+	PCICR |= (1 << pin4); 
+	//set LED to output for when the center QTI goes over the edge
+	DDRD |= (1<< pin5); 
 }
 
-void setupQTI(int pin){ //make applicable for all QTI
-	//DDRD |= 0b00000100;
-	DDRB |= 1<<pin;
-	PCMSK2 |= 0b00001000; //fix
-	PCICR |= 0b00000100; //fix
+void wheelSetup(int pin1, int pin2, int pin3, int pin4){
+	//make wheels outputs
+	DDRB |= (1<<pin1) | (1<<pin2)| (1<<pin3) | (1<<pin4);
 }
 
+#endif /* QTI_H */
 
